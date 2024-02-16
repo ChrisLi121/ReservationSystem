@@ -1,29 +1,44 @@
 package com.chris.yaqi.java.springboot.demo.client;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.Period;
+
+@Entity
+@Table
 public class Client {
+    @Id
+    @SequenceGenerator(
+            name = "client_sequence",
+            sequenceName = "client_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "client_sequence"
+    )
     private Long id;
     private String name;
     private LocalDate dob;
+    @Transient
     private Integer age;
     private String email;
 
     public Client() {
     }
 
-    public Client(Long id, String name, LocalDate dob, Integer age, String email) {
+    public Client(Long id, String name, LocalDate dob, String email) {
         this.id = id;
         this.name = name;
         this.dob = dob;
-        this.age = age;
         this.email = email;
     }
 
-    public Client(String name, LocalDate dob, Integer age, String email) {
+    public Client(String name, LocalDate dob, String email) {
         this.name = name;
         this.dob = dob;
-        this.age = age;
+
         this.email = email;
     }
 
@@ -52,7 +67,7 @@ public class Client {
     }
 
     public Integer getAge() {
-        return age;
+        return Period.between(dob,LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
